@@ -148,7 +148,6 @@
     <Content Include="add.aspx" />
     <Content Include="dashboard.aspx" />
     <Content Include="item-manage.aspx" />
-    <Content Include="add.html" />
     <Content Include="css\materialize.css" />
     <Content Include="css\materialize.min.css" />
     <Content Include="css\style.css" />
@@ -254,6 +253,7 @@
       <DependentUpon>DAO.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

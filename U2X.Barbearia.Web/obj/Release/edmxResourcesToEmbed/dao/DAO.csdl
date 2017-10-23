@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="u2xMainModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tbl_usuario">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="senha" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="isAdmin" Type="Boolean" />
+    <NavigationProperty Name="tbl_registro" Relationship="u2xMainModel.FK_tbl_registro_tbl_usuario" FromRole="tbl_usuario" ToRole="tbl_registro" />
+  </EntityType>
+  <EntityContainer Name="u2xMainEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tbl_usuario" EntityType="Self.tbl_usuario" />
+    <EntitySet Name="tbl_servico" EntityType="u2xMainModel.tbl_servico" />
+    <EntitySet Name="tbl_registro" EntityType="u2xMainModel.tbl_registro" />
+    <AssociationSet Name="FK_tbl_registro_tbl_servicos" Association="u2xMainModel.FK_tbl_registro_tbl_servicos">
+      <End Role="tbl_servico" EntitySet="tbl_servico" />
+      <End Role="tbl_registro" EntitySet="tbl_registro" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_registro_tbl_usuario" Association="u2xMainModel.FK_tbl_registro_tbl_usuario">
+      <End Role="tbl_usuario" EntitySet="tbl_usuario" />
+      <End Role="tbl_registro" EntitySet="tbl_registro" />
+    </AssociationSet>
+    <EntitySet Name="vw_registro" EntityType="u2xMainModel.vw_registro" />
+  </EntityContainer>
+  <EntityType Name="tbl_servico">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="valor" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="tbl_registro" Relationship="u2xMainModel.FK_tbl_registro_tbl_servicos" FromRole="tbl_servico" ToRole="tbl_registro" />
+  </EntityType>
+  <EntityType Name="tbl_registro">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idUsuario" Type="Int32" />
+    <Property Name="idServico" Type="Int32" />
+    <Property Name="data" Type="DateTime" Precision="3" />
+    <Property Name="idCriador" Type="Int32" />
+    <Property Name="isCartao" Type="Boolean" />
+    <NavigationProperty Name="tbl_servico" Relationship="u2xMainModel.FK_tbl_registro_tbl_servicos" FromRole="tbl_registro" ToRole="tbl_servico" />
+    <NavigationProperty Name="tbl_usuario" Relationship="u2xMainModel.FK_tbl_registro_tbl_usuario" FromRole="tbl_registro" ToRole="tbl_usuario" />
+  </EntityType>
+  <Association Name="FK_tbl_registro_tbl_servicos">
+    <End Type="u2xMainModel.tbl_servico" Role="tbl_servico" Multiplicity="0..1" />
+    <End Type="u2xMainModel.tbl_registro" Role="tbl_registro" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_servico">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="tbl_registro">
+        <PropertyRef Name="idServico" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_registro_tbl_usuario">
+    <End Type="u2xMainModel.tbl_usuario" Role="tbl_usuario" Multiplicity="0..1" />
+    <End Type="u2xMainModel.tbl_registro" Role="tbl_registro" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_usuario">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="tbl_registro">
+        <PropertyRef Name="idUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="vw_registro">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="isUsuario" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="isUsuario" Type="Int32" Nullable="false" />
+    <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="valor" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="date" Type="DateTime" Precision="3" />
+    <Property Name="isCartao" Type="Boolean" />
+  </EntityType>
+</Schema>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="u2xMainModelStoreContainer" CdmEntityContainer="u2xMainEntities">
+    <EntitySetMapping Name="tbl_usuario">
+      <EntityTypeMapping TypeName="u2xMainModel.tbl_usuario">
+        <MappingFragment StoreEntitySet="tbl_usuario">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="login" ColumnName="login" />
+          <ScalarProperty Name="senha" ColumnName="senha" />
+          <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_servico">
+      <EntityTypeMapping TypeName="u2xMainModel.tbl_servico">
+        <MappingFragment StoreEntitySet="tbl_servico">
+          <ScalarProperty Name="valor" ColumnName="valor" />
+          <ScalarProperty Name="descricao" ColumnName="descricao" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_registro">
+      <EntityTypeMapping TypeName="u2xMainModel.tbl_registro">
+        <MappingFragment StoreEntitySet="tbl_registro">
+          <ScalarProperty Name="isCartao" ColumnName="isCartao" />
+          <ScalarProperty Name="idCriador" ColumnName="idCriador" />
+          <ScalarProperty Name="data" ColumnName="data" />
+          <ScalarProperty Name="idServico" ColumnName="idServico" />
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_registro">
+      <EntityTypeMapping TypeName="u2xMainModel.vw_registro">
+        <MappingFragment StoreEntitySet="vw_registro">
+          <ScalarProperty Name="isCartao" ColumnName="isCartao" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="valor" ColumnName="valor" />
+          <ScalarProperty Name="descricao" ColumnName="descricao" />
+          <ScalarProperty Name="login" ColumnName="login" />
+          <ScalarProperty Name="isUsuario" ColumnName="isUsuario" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
