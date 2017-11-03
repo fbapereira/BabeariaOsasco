@@ -22,7 +22,7 @@ namespace U2X.Barbearia.Web.dao
     
         public int id { get; set; }
         public string descricao { get; set; }
-        public Nullable<decimal> valor { get; set; }
+        public decimal valor { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_registro> tbl_registro { get; set; }

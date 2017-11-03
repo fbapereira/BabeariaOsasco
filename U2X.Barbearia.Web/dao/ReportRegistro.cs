@@ -4,13 +4,14 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
+using U2X.Barbearia.Web.controllers;
 
 namespace U2X.Barbearia.Web.dao
 {
     public class ReportRegistro : vw_registro
     {
 
-        private dao.u2xMainEntities db = new dao.u2xMainEntities();
+        private dao.U2xDB db = new dao.U2xDB();
 
         public List<ReportRegistro> GetList(Int32 idUsuario = 0, DateTime? data = null)
         {

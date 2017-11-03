@@ -17,7 +17,7 @@
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="descricao" Type="varchar" MaxLength="100" />
-    <Property Name="valor" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="valor" Type="decimal" Precision="18" Scale="2" Nullable="false" />
   </EntityType>
   <EntityType Name="tbl_usuario">
     <Key>

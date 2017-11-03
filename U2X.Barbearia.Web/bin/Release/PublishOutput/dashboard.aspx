@@ -11,7 +11,7 @@
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet"  />
 </head>
 
 <body>
@@ -36,7 +36,11 @@
     </nav>
 
     <div class="section no-pad-bot" id="index-banner">
-        <div class="container">
+        <form runat="server" class="container">
+            <div id="divMsgServico" runat="server" style="margin-bottom: 10px" visible="false" class="alert alert-success">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Sucesso!</strong> Servico registrado com sucesso.
+            </div>
             <ul class="collapsible" data-collapsible="accordion">
                 <li>
                     <div class="collapsible-header active">
@@ -99,11 +103,11 @@
                     </div>
                 </li>
             </ul>
-        </div>
+        </form>
     </div>
 
     <div class="fixed-action-btn">
-        <a class="btn-floating green" href="add.html">
+        <a class="btn-floating green" href="add.aspx">
             <i class="material-icons">add</i>
         </a>
     </div>

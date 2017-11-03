@@ -7,7 +7,16 @@ namespace U2X.Barbearia.Web.dao
 {
     public class Usuario : tbl_usuario
     {
-        dao.u2xMainEntities db = new dao.u2xMainEntities();
+        private dao.U2xDB db = new dao.U2xDB();
+
+        public void Update(Int32 idUsuario, Usuario oUsuario)
+        {
+            tbl_usuario temp = (tbl_usuario)db.tbl_usuario.Where(usuario =>
+           usuario.id == idUsuario).FirstOrDefault();
+            temp.senha = oUsuario.senha;
+            db.SaveChanges();
+        }
+
 
         public void Add(Usuario oUsuario)
         {
@@ -24,11 +33,11 @@ namespace U2X.Barbearia.Web.dao
         public Usuario Login(String sLogin, String sSenha)
         {
 
-            object temp = db.tbl_usuario.Where(usuario =>
-           usuario.login == sLogin &&
-           usuario.senha == sSenha).FirstOrDefault();
+            tbl_usuario temp = (tbl_usuario)db.tbl_usuario.Where(usuario =>
+            usuario.login == sLogin).FirstOrDefault();
 
-            if (temp != null)
+
+            if (temp != null && String.Equals(temp.senha, sSenha))
             {
                 return ToUsuario((tbl_usuario)temp);
             }

@@ -1,124 +1,344 @@
+﻿
 <!DOCTYPE html>
-<html lang="en">
+<html lang="PT">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-  <title>Starter Template - Materialize</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Barbearia</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
+    <style>
+        .open {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-  <nav class="green" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="dashboard.html" class="brand-logo">Barbearia Osasco</a>
-      <ul class="right hide-on-med-and-down">
-        <li>
-          <a href="historico.html">Histórico</a>
-        </li>
-      </ul>
+    <input type="hidden" id="id">
+    <input type="hidden" id="login">
+    <input type="hidden" id="senha">
+    <input type="hidden" id="isAdmin">
+    <nav class="green" role="navigation">
+        <div class="nav-wrapper">
 
-      <ul id="nav-mobile" class="side-nav">
-        <li>
-          <a href="historico.html">Histórico</a>
-        </li>
-      </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse">
-        <i class="material-icons">menu</i>
-      </a>
+            <a href="dashboard.html" class="brand-logo">Barbearia</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a id="mnServico" href="servico.html">Serviços</a></li>
+                <li><a id="mnUsuario" href="AlterarSenha.html">Usuários</a></li>
+                <li><a id="mnHistorico" href="historico.html">Histórico</a></li>
+                <li><a id="mnSair" href="sair.html">Sair</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a id="mmServico" href="servico.html">Serviços</a></li>
+                <li><a id="mmUsuario" href="AlterarSenha.html">Usuários</a></li>
+                <li><a id="mmHistorico" href="historico.html">Histórico</a></li>
+                <li><a id="mmSair" href="sair.html">Sair</a></li>
+            </ul>
+
+
+
+        </div>
+    </nav>
+
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            <ul class="collapsible" data-collapsible="accordion">
+                <li id="pnlSearch">
+                    <div class="uncollapsible-header active">
+                        <i class="material-icons">search</i>Busca
+                    </div>
+                    <div class="collapsible-body open">
+                        <div class="row">
+                            <div class="input-field col m6 offset-m3 s8 offset-s2">
+                                <select id="slProfissional" onchange="CarregaTabela()"></select>
+                                <label for="slProfissional">Profissional</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header active">
+                        <i class="material-icons">filter_list</i>Resumo
+                    </div>
+                    <div class="collapsible-body">
+                        <p>
+                            <b>Valor em Cartão</b>:
+                            <label id="lblCartao" />
+                        </p>
+                        <p>
+                            <b>Valor em Dinheiro</b>:
+                            <label id="lblDinheiro" />
+                        </p>
+                        <p>
+                            <b>Valor total</b>:
+                            <label id="lblTotal" />
+                        </p>
+                        <p>
+                            <b>valor a receber</b>:
+                            <label id="lblReceber" />
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">storage</i>Detalhe
+                    </div>
+                    <div class="collapsible-body">
+
+                        <table id="tblServico" class="responsive-table">
+                            <thead>
+                                <tr>
+                                    <th>Usuário</th>
+                                    <th>Serviço</th>
+                                    <th>valor</th>
+                                    <th>Horário</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
-  </nav>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <ul class="collapsible" data-collapsible="accordion">
-        <li>
-          <div class="collapsible-header active">
-            <i class="material-icons">search</i>Detalhe
-          </div>
-          <div class="collapsible-body">
-            <div class="row">
-              <div class="input-field col s6 offset-s2">
-                <select>
-                  <option value="" selected>Escolha</option>
-                  <option value="1">Todos</option>
-                  <option value="2">Leo</option>
-                  <option value="3">Fabu</option>
-                </select>
-                <label>Profissional</label>
-              </div>
-              <div class="col s2">
-                <a class="btn-large waves-effect waves-light green">Filtrar</a>
-              </div>
+    <div class="fixed-action-btn">
+        <a class="btn-floating green" onclick="IrParaAdd();">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    <div id="modalLoader" class="modal modalLoader">
+        <div class="modal-content center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Serviço</th>
-                  <th>valor</th>
-                  <th>Horário</th>
-                  <th>Profissional</th>
-                  <th></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>Barba</td>
-                  <td>R$25,00</td>
-                  <td>17/10/2017 13:00</td>
-                  <td>Leo</td>
-                  <td>
-                    <i class="material-icons">credit_card</i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Barba</td>
-                  <td>R$25,00</td>
-                  <td>17/10/2017 14:40</td>
-                  <td>Fabu</td>
-                  <td>
-                    <i class="material-icons">attach_money</i>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>Cabelo</td>
-                  <td>R$25,00</td>
-                  <td>17/10/2017 13:30</td>
-                  <td>Fabu</td>
-
-                  <td>
-                    <i class="material-icons">credit_card</i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </li>
-      </ul>
+            <p>Carregando</p>
+        </div>
     </div>
-  </div>
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+    <style>
+        .modalLoader {
+            background: transparent;
+            box-shadow: 0 0px 0px 0px;
+            top: 20%;
+            color: white;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
 
-  <div class="fixed-action-btn">
-    <a class="btn-floating green" href="add.html">
-      <i class="material-icons">add</i>
-    </a>
-  </div>
+            $('.modal').modal({
+                dismissible: false, // Modal can be dismissed by clicking outside of the modal
+                opacity: .8, // Opacity of modal background
+            });
+
+            $('#modalLoader').modal('open');
+            CarregaUsuarios();
+            CarregaTabela();
+            SalvaDadosUsuario();
+        });
+
+        function ValidaCredenciais() {
+            var id = $("#id").val();
+            var isAdmin = $("#isAdmin").val();
+
+            if (isAdmin == "false") {
+                $("#slProfissional").val(id);
+                $('#slProfissional').prop('disabled', 'disabled');
+                $("#pnlSearch").hide();
+
+                $("#mnServico").hide();
+                $("#mmServico").hide();
+
+            }
+            $('#modalLoader').modal('close');
+
+            $('#slProfissional').material_select();
+        }
+
+        function IrParaAdd() {
+            var login = $("#login").val();
+            var senha = $("#senha").val();
+            var id = $("#id").val();
+            var isAdmin = $("#isAdmin").val();
+
+            sessionStorage.setItem('login', login);
+            sessionStorage.setItem('senha', senha);
+            sessionStorage.setItem('id', id);
+            sessionStorage.setItem('isAdmin', isAdmin);
+
+            window.location.replace("/add.html");
+        }
+
+        function SalvaDadosUsuario() {
+
+            $("#login").val(sessionStorage.getItem('login'));
+            $("#senha").val(sessionStorage.getItem('senha'));
+            $("#id").val(sessionStorage.getItem('id'));
+            $("#isAdmin").val(sessionStorage.getItem('isAdmin'));
+
+            if (!$("#login").val()) {
+                window.location.replace("/index.html");
+            }
+
+        }
 
 
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('select').material_select();
-    });
-  </script>
+        function CarregaTabela() {
+
+            $('#modalLoader').modal('open');
+            var idProfissional = $("#slProfissional").val();
+            if (!idProfissional) { idProfissional = 0 }
+
+            $.ajax({
+                url: "/api/ReportRegistro/GetByDate/" + idProfissional + "/" + moment().format('DDMMYYYY'),
+                success: function (ReportRegistros) {
+
+                    var table = $("#tblServico");
+                    $("#tblServico tr>td").remove();
+
+                    //todas
+                    CalculaValores(ReportRegistros);
+                    ReportRegistros.forEach(reportRegistro => {
+                        // Create an empty <tr> element and add it to the 1st position of the table:
+                        var row = table[0].tBodies[0].insertRow(0);
+
+                        // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+                        var cell1 = row.insertCell(0);
+                        cell1.innerHTML = reportRegistro.login;
+
+                        var cell2 = row.insertCell(1);
+                        cell2.innerHTML = reportRegistro.descricao;
+
+                        var cell3 = row.insertCell(2);
+                        cell3.innerHTML = "R$ " + FormatarReal(reportRegistro.valor * 100);
+
+                        var cell4 = row.insertCell(3);
+                        cell4.innerHTML = moment(reportRegistro.date).format('h:mm a');
+
+                        var cell5 = row.insertCell(4);
+                        if (reportRegistro.isCartao) {
+                            cell5.innerHTML = `<i class="material-icons">credit_card</i>`;
+                        } else {
+                            cell5.innerHTML = `<i class="material-icons">attach_money</i>`;
+                        }
+                    });
+
+                    $('#modalLoader').modal('close');
+                },
+                error: function () {
+                    Materialize.toast('O [login] ou [senha] são inválidos.', 4000);
+
+                    $('#modalLoader').modal('close');
+                    return;
+                }
+
+            });
+
+
+        }
+
+        function CarregaUsuarios() {
+
+            $.ajax({
+                url: "/api/usuario",
+                success: function (servicos) {
+                    var slProfissional = $("#slProfissional");
+
+                    ///inicial
+                    var option = document.createElement("option");
+                    option.text = "Todos";
+                    option.value = 0;
+                    option.selected = true;
+                    slProfissional[0].add(option);
+
+                    //todas
+                    servicos.forEach(servico => {
+                        var option = document.createElement("option");
+                        option.text = servico.login;
+                        option.value = servico.id;
+                        slProfissional[0].add(option);
+                    });
+
+                    ValidaCredenciais();
+
+
+                },
+                error: function () {
+                    Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
+                    return;
+                }
+
+            });
+        }
+
+        function FormatarReal(int) {
+            var tmp = int + '';
+            tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
+            if (tmp.length > 6)
+                tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+
+            return tmp;
+        }
+
+        function CalculaValores(servicos) {
+            var nCartao = 0;
+            var nDinheiro = 0;
+            var nTotal = 0;
+            var nReceber = 0;
+
+            servicos.forEach(servico => {
+                nTotal = nTotal + servico.valor;
+
+                if (servico.isCartao) {
+                    nCartao = nCartao + servico.valor;
+                } else {
+                    nDinheiro = nDinheiro + servico.valor;
+                }
+
+            });
+
+            nReceber = nTotal * 0.6 - nDinheiro;
+
+            $("#lblCartao").text("R$ " + FormatarReal(nCartao * 100));
+            $("#lblDinheiro").text("R$ " + FormatarReal(nDinheiro * 100));
+            $("#lblTotal").text("R$ " + FormatarReal(nTotal * 100));
+            $("#lblReceber").text("R$ " + FormatarReal(nReceber * 100));
+
+
+
+
+        }
+    </script>
+
+
+
+
 </body>
-
 </html>

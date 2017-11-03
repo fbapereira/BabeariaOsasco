@@ -13,10 +13,10 @@ namespace U2X.Barbearia.Web.dao
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class u2xMainEntities : DbContext
+    public partial class U2xDB : DbContext
     {
-        public u2xMainEntities()
-            : base("name=u2xMainEntities")
+        public U2xDB()
+            : base("name=U2xDB")
         {
         }
     
@@ -25,9 +25,9 @@ namespace U2X.Barbearia.Web.dao
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<tbl_usuario> tbl_usuario { get; set; }
-        public virtual DbSet<tbl_servico> tbl_servico { get; set; }
         public virtual DbSet<tbl_registro> tbl_registro { get; set; }
+        public virtual DbSet<tbl_servico> tbl_servico { get; set; }
+        public virtual DbSet<tbl_usuario> tbl_usuario { get; set; }
         public virtual DbSet<vw_registro> vw_registro { get; set; }
     }
 }

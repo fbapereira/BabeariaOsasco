@@ -11,7 +11,7 @@ namespace U2X.Barbearia.Web.dao
         public String servico;
         public String preco;
 
-        private dao.u2xMainEntities db = new dao.u2xMainEntities();
+        private dao.U2xDB db = new dao.U2xDB();
 
         private List<Usuario> lstUsuario = new List<Usuario>();
 
@@ -58,6 +58,8 @@ namespace U2X.Barbearia.Web.dao
              {
                  lstDef.Add(ToRegistro(obj));
              });
+
+            lstDef.OrderBy(x => x.data);
 
             return lstDef;
         }
