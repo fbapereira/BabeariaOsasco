@@ -1,6 +1,6 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
@@ -10,6 +10,7 @@
     <link href="css/style.css" type="text/css" rel="stylesheet" />
 
 </head>
+
 <body>
     <nav class="green" role="navigation">
         <div class="nav-wrapper container">
@@ -34,8 +35,7 @@
             </div>
             <div class="row">
                 <div class="col s8 offset-s2">
-                    <button id="btn_entrar" class="btn-large waves-effect waves-light green"
-                            style="width: 100%" onclick="btn_entrar_click()">
+                    <button id="btn_entrar" class="btn-large waves-effect waves-light green" style="width: 100%" onclick="btn_entrar_click()">
                         Entrar
                     </button>
                 </div>
@@ -50,9 +50,11 @@
                     <div class="spinner-layer spinner-green-only">
                         <div class="circle-clipper left">
                             <div class="circle"></div>
-                        </div><div class="gap-patch">
+                        </div>
+                        <div class="gap-patch">
                             <div class="circle"></div>
-                        </div><div class="circle-clipper right">
+                        </div>
+                        <div class="circle-clipper right">
                             <div class="circle"></div>
                         </div>
                     </div>
@@ -81,7 +83,53 @@
                 dismissible: false, // Modal can be dismissed by clicking outside of the modal
                 opacity: .8, // Opacity of modal background
             });
+
+
+            var sLogin = getCookie('login');
+            var sSenha = getCookie('senha');
+            if (!sLogin || !sSenha) {
+                return;
+            }
+
+            //request
+            $.ajax({
+                url: "/api/usuario/Login/" + sLogin + "/" + sSenha,
+                success: function (result) {
+                    if (!result) {
+                        return;
+                    }
+                    sessionStorage.setItem('login', sLogin);
+                    sessionStorage.setItem('senha', sSenha);
+                    sessionStorage.setItem('id', result.id);
+                    sessionStorage.setItem('isAdmin', result.isAdmin);
+                    window.location.replace("./dashboard-adm.html");
+                }
+            });
         });
+
+        function setCookie(cname, cvalue) {
+            var d = new Date();
+            d.setTime(d.getTime() + (60 * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        }
+
 
         function btn_entrar_click() {
             $('#modalLoader').modal('open');
@@ -114,7 +162,11 @@
                     sessionStorage.setItem('senha', password);
                     sessionStorage.setItem('id', result.id);
                     sessionStorage.setItem('isAdmin', result.isAdmin);
-                    window.location.replace("/dashboard-adm.html");
+
+                    setCookie("login", login);
+                    setCookie("senha", password);
+
+                    window.location.replace("./dashboard-adm.html");
                 },
                 error: function () {
                     Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
@@ -126,4 +178,5 @@
         }
     </script>
 </body>
+
 </html>

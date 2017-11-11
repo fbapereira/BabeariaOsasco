@@ -1,0 +1,18 @@
+{
+    "android": {
+        "debug": {
+          "keystore": "../u2x.keystore",
+            "storePassword": "4P0C@l1ps3",
+            "alias": "alias_name",
+            "password" : "4P0C@l1ps3",
+            "keystoreType": ""
+        },
+        "release": {
+            "keystore": "../u2x.keystore",
+            "storePassword": "4P0C@l1ps3",
+            "alias": "alias_name",
+            "password" : "4P0C@l1ps3",
+            "keystoreType": ""
+        }
+    }
+}

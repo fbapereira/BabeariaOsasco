@@ -207,7 +207,7 @@
             sessionStorage.setItem('id', id);
             sessionStorage.setItem('isAdmin', isAdmin);
 
-            window.location.replace("/add.html");
+            window.location.replace("./add.html");
         }
 
         function SalvaDadosUsuario() {
@@ -218,7 +218,7 @@
             $("#isAdmin").val(sessionStorage.getItem('isAdmin'));
 
             if (!$("#login").val()) {
-                window.location.replace("/index.html");
+                window.location.replace("./index.html");
             }
 
         }

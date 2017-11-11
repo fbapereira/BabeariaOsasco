@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Starter Template - Materialize</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+    <input type="hidden" id="id">
+    <input type="hidden" id="login">
+    <input type="hidden" id="senha">
+    <input type="hidden" id="isAdmin">
+    <nav class="green" role="navigation">
+        <div class="nav-wrapper">
+            <a href="dashboard.html" class="brand-logo">Barbearia</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a id="mnServico" href="servico.html">Serviços</a></li>
+                <li><a id="mnUsuario" href="AlterarSenha.html">Usuários</a></li>
+                <li><a id="mnHistorico" href="historico.html">Histórico</a></li>
+                <li><a id="mnSair" href="sair.html">Sair</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a id="mmServico" href="servico.html">Serviços</a></li>
+                <li><a id="mmUsuario" href="AlterarSenha.html">Usuários</a></li>
+                <li><a id="mmHistorico" href="historico.html">Histórico</a></li>
+                <li><a id="mmSair" href="sair.html">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            <br>
+            <br>
+
+            <div class="row">
+                <div class="input-field col s8 offset-s2">
+                    <select id="slProfissional" class="validate"></select>
+                    <label for="slProfissional">Profissional</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s8 offset-s2">
+                    <select id="slServico" class="validate"></select>
+                    <label for="slServico">Serviço realizado</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s8 offset-s2">
+                    <input type="checkbox" id="ckCartao" checked />
+                    <label for="ckCartao">Pago com Cartão</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4 offset-s2">
+                    <a class="btn-large waves-effect waves-light grey" onclick="IrParaDashBoard();" style="width:100%">Voltar</a>
+                </div><div class="col s4 ">
+                    <a class="btn-large waves-effect waves-light green" onclick="btn_salvar_click();" style="width:100%">Salvar</a>
+                </div>
+            </div>
+            <br>
+            <br>
+
+        </div>
+    </div>
+    <div id="modalLoader" class="modal modalLoader">
+        <div class="modal-content center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Carregando</p>
+        </div>
+    </div>
+
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+    <style>
+        .modalLoader {
+            background: transparent;
+            box-shadow: 0 0px 0px 0px;
+            top: 20%;
+            color: white;
+        }
+    </style>
+</body>
+<script>
+
+    $(document).ready(function () {
+        // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal({
+            dismissible: false, // Modal can be dismissed by clicking outside of the modal
+            opacity: .8, // Opacity of modal background
+        });
+        CarregaUsuarios();
+        CarregaServicos();
+        SalvaDadosUsuario();
+
+
+    });
+
+    function ValidaCredenciais() {
+        var id = $("#id").val();
+        var isAdmin = $("#isAdmin").val();
+
+        if (isAdmin == "false") {
+            $('#slProfissional').prop('disabled', 'disabled');
+
+
+            $("#mnServico").hide();
+            $("#mmServico").hide();
+
+        }
+
+        $("#slProfissional").val(id);
+        $('#slProfissional').material_select();
+        $('#modalLoader').modal('close');
+
+
+    }
+
+
+    function SalvaDadosUsuario() {
+
+        $("#login").val(sessionStorage.getItem('login'));
+        $("#senha").val(sessionStorage.getItem('senha'));
+        $("#id").val(sessionStorage.getItem('id'));
+        $("#isAdmin").val(sessionStorage.getItem('isAdmin'));
+
+        if (!$("#login").val()) {
+            window.location.replace("./index.html");
+        }
+
+    }
+
+    function IrParaDashBoard() {
+        var login = $("#login").val();
+        var senha = $("#senha").val();
+        var id = $("#id").val();
+        var isAdmin = $("#isAdmin").val();
+
+        sessionStorage.setItem('login', login);
+        sessionStorage.setItem('senha', senha);
+        sessionStorage.setItem('id', id);
+        sessionStorage.setItem('isAdmin', isAdmin);
+
+        window.location.replace("./dashboard-adm.html");
+
+    }
+
+    function CarregaServicos() {
+
+        $.ajax({
+            url: "http://barbeariaosasco.u2x.com.br/api/Servico",
+            success: function (servicos) {
+                var slServico = $("#slServico");
+
+                ///inicial
+                var option = document.createElement("option");
+                option.text = "Selecione";
+                option.value = 0;
+                option.selected = true;
+                slServico[0].add(option);
+
+                //todas
+                servicos.forEach(servico => {
+                    var option = document.createElement("option");
+                    option.text = servico.descricao;
+                    option.value = servico.id;
+                    slServico[0].add(option);
+                });
+
+                $('select').material_select();
+
+            },
+            error: function () {
+                Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
+                return;
+            }
+
+        });
+    }
+
+    function CarregaUsuarios() {
+        $('#modalLoader').modal('open');
+
+        $.ajax({
+            url: "http://barbeariaosasco.u2x.com.br/api/usuario",
+            success: function (servicos) {
+                var slProfissional = $("#slProfissional");
+
+                ///inicial
+                var option = document.createElement("option");
+                option.text = "Selecione";
+                option.value = 0;
+                option.selected = true;
+                slProfissional[0].add(option);
+
+                //todas
+                servicos.forEach(servico => {
+                    var option = document.createElement("option");
+                    option.text = servico.login;
+                    option.value = servico.id;
+                    slProfissional[0].add(option);
+                });
+
+
+                ValidaCredenciais();
+            },
+            error: function () {
+                Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
+                return;
+            }
+
+        });
+    }
+
+    function btn_salvar_click() {
+        $('#modalLoader').modal('open');
+
+        var profissional = $("#slProfissional").val();
+        var servico = $("#slServico").val();
+        var isCartao = document.getElementById("ckCartao").checked;
+
+
+        //validation
+        if (!profissional || profissional == 0) {
+            Materialize.toast('Por favor, selecione a [profissional].', 4000)
+            $('#modalLoader').modal('close');
+            return;
+        }
+
+        if (!servico || servico == 0) {
+            Materialize.toast('Por favor, selecione a [servico].', 4000)
+            $('#modalLoader').modal('close');
+            return;
+        }
+
+        var jsonObj = {
+            idUsuario: profissional,
+            idCriador: "1",
+            idServico: servico,
+            isCartao: isCartao
+        }
+
+        $.ajax({
+            url: "http://barbeariaosasco.u2x.com.br/api/Registro",
+            type: "POST",
+            data: jsonObj,
+
+            success: function (servicos) {
+                IrParaDashBoard();
+                $('#modalLoader').modal('close');
+            },
+            error: function () {
+                Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
+                $('#modalLoader').modal('close');
+                return;
+            }
+
+        });
+
+    }
+
+</script>
+
+</html>

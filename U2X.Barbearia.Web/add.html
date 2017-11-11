@@ -145,7 +145,7 @@
         $("#isAdmin").val(sessionStorage.getItem('isAdmin'));
 
         if (!$("#login").val()) {
-            window.location.replace("/index.html");
+            window.location.replace("./index.html");
         }
 
     }
@@ -161,7 +161,7 @@
         sessionStorage.setItem('id', id);
         sessionStorage.setItem('isAdmin', isAdmin);
 
-        window.location.replace("/dashboard-adm.html");
+        window.location.replace("./dashboard-adm.html");
 
     }
 
