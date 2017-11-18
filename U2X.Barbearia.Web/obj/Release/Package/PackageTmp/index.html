@@ -1,6 +1,6 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
@@ -8,15 +8,15 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="css/style.css" type="text/css" rel="stylesheet" />
-
 </head>
+
 <body>
     <nav class="green" role="navigation">
         <div class="nav-wrapper container">
             <a id="logo-container" href="#" class="brand-logo center">Barbearia</a>
         </div>
     </nav>
-    <div class="section no-pad-bot" id="index-banner">
+    <div class="section no-pad-bot" id="frmLogin">
         <div class="container">
             <br>
             <br>
@@ -34,10 +34,10 @@
             </div>
             <div class="row">
                 <div class="col s8 offset-s2">
-                    <button id="btn_entrar" class="btn-large waves-effect waves-light green"
-                            style="width: 100%" onclick="btn_entrar_click()">
+                    <button id="btn_entrar" class="btn-large waves-effect waves-light green" style="width: 100%" onclick="btn_entrar_click()">
                         Entrar
                     </button>
+
                 </div>
             </div>
         </div>
@@ -50,9 +50,11 @@
                     <div class="spinner-layer spinner-green-only">
                         <div class="circle-clipper left">
                             <div class="circle"></div>
-                        </div><div class="gap-patch">
+                        </div>
+                        <div class="gap-patch">
                             <div class="circle"></div>
-                        </div><div class="circle-clipper right">
+                        </div>
+                        <div class="circle-clipper right">
                             <div class="circle"></div>
                         </div>
                     </div>
@@ -65,6 +67,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="js/materialize.js"></script>
     <script src="js/init.js"></script>
+    <script src="js/main.js"></script>
     <style>
         .modalLoader {
             background: transparent;
@@ -75,11 +78,37 @@
     </style>
 
     <script>
+
         $(document).ready(function () {
-            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-            $('.modal').modal({
-                dismissible: false, // Modal can be dismissed by clicking outside of the modal
-                opacity: .8, // Opacity of modal background
+            ConfigModal();
+            ShowMessage();
+            $('#modalLoader').modal('open');
+
+            //obtem dados da sessao
+            var sLogin = getCookie('login');
+            var sSenha = getCookie('senha');
+            if (!sLogin || !sSenha) {
+                $('#modalLoader').modal('close');
+                return;
+            }
+
+            //Valida login
+            $.ajax({
+                url: URL + "/api/usuario/Login/" + sLogin + "/" + sSenha,
+                success: function (result) {
+                    if (!result) {
+                        $('#modalLoader').modal('close');
+                        return;
+                    }
+                    sessionStorage.setItem('login', sLogin);
+                    sessionStorage.setItem('senha', sSenha);
+                    sessionStorage.setItem('id', result.id);
+                    sessionStorage.setItem('isAdmin', result.isAdmin);
+                    window.location.replace("./dashboard-adm.html");
+                },
+                error: function () {
+                    $('#modalLoader').modal('close');
+                }
             });
         });
 
@@ -103,7 +132,7 @@
 
             //request
             $.ajax({
-                url: "/api/usuario/Login/" + login + "/" + password,
+                url: URL + "/api/usuario/Login/" + login + "/" + password,
                 success: function (result) {
                     if (!result) {
                         Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
@@ -114,7 +143,11 @@
                     sessionStorage.setItem('senha', password);
                     sessionStorage.setItem('id', result.id);
                     sessionStorage.setItem('isAdmin', result.isAdmin);
-                    window.location.replace("/dashboard-adm.html");
+
+                    setCookie("login", login);
+                    setCookie("senha", password);
+
+                    window.location.replace("./dashboard-adm.html");
                 },
                 error: function () {
                     Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
@@ -126,4 +159,5 @@
         }
     </script>
 </body>
+
 </html>

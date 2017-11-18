@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="css/style.css" type="text/css" rel="stylesheet" />
-
 </head>
 
 <body>
@@ -17,7 +16,7 @@
             <a id="logo-container" href="#" class="brand-logo center">Barbearia</a>
         </div>
     </nav>
-    <div class="section no-pad-bot" id="index-banner">
+    <div class="section no-pad-bot" id="frmLogin">
         <div class="container">
             <br>
             <br>
@@ -38,9 +37,7 @@
                     <button id="btn_entrar" class="btn-large waves-effect waves-light green" style="width: 100%" onclick="btn_entrar_click()">
                         Entrar
                     </button>
-                    <button id="btn_entrar" class="btn-large waves-effect waves-light green" style="width: 100%" onclick="btn_entrar_click_v2()">
-                        Entrar v2
-                    </button>
+
                 </div>
             </div>
         </div>
@@ -70,6 +67,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="js/materialize.js"></script>
     <script src="js/init.js"></script>
+    <script src="js/main.js"></script>
     <style>
         .modalLoader {
             background: transparent;
@@ -81,49 +79,25 @@
 
     <script>
 
-        function btn_entrar_click_v2() {
-
-            var sLogin = getCookie('login');
-            var sSenha = getCookie('senha');
-            if (!sLogin || !sSenha) {
-                return;
-            }
-
-            //request
-            $.ajax({
-                url: "http://barbeariaosasco.u2x.com.br/api/usuario/Login/" + sLogin + "/" + sSenha,
-                success: function (result) {
-                    if (!result) {
-                        return;
-                    }
-                    sessionStorage.setItem('login', sLogin);
-                    sessionStorage.setItem('senha', sSenha);
-                    sessionStorage.setItem('id', result.id);
-                    sessionStorage.setItem('isAdmin', result.isAdmin);
-                    window.location.replace("./dashboard-adm.html");
-                }
-            });
-        }
-
         $(document).ready(function () {
-            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-            $('.modal').modal({
-                dismissible: false, // Modal can be dismissed by clicking outside of the modal
-                opacity: .8, // Opacity of modal background
-            });
+            ConfigModal();
+            ShowMessage();
+            $('#modalLoader').modal('open');
 
-
+            //obtem dados da sessao
             var sLogin = getCookie('login');
             var sSenha = getCookie('senha');
             if (!sLogin || !sSenha) {
+                $('#modalLoader').modal('close');
                 return;
             }
 
-            //request
+            //Valida login
             $.ajax({
-                url: "http://barbeariaosasco.u2x.com.br/api/usuario/Login/" + sLogin + "/" + sSenha,
+                url: URL + "/api/usuario/Login/" + sLogin + "/" + sSenha,
                 success: function (result) {
                     if (!result) {
+                        $('#modalLoader').modal('close');
                         return;
                     }
                     sessionStorage.setItem('login', sLogin);
@@ -131,25 +105,17 @@
                     sessionStorage.setItem('id', result.id);
                     sessionStorage.setItem('isAdmin', result.isAdmin);
                     window.location.replace("./dashboard-adm.html");
+                },
+                error: function () {
+                    $('#modalLoader').modal('close');
                 }
             });
         });
 
-        function setCookie(key, value) {
-            var storage = window.localStorage;
-            storage.setItem(key, value);
-        }
-
-        function getCookie(key) {
-            var storage = window.localStorage;
-            return storage.getItem(key);
-        }
-
-
         function btn_entrar_click() {
             $('#modalLoader').modal('open');
             var password = $("#txtPassword").val();
-            var login = $("#txtLogin").val();
+            var login = $("#txtLogin").val().replace(/\s/g,'');
 
             //validation
             if (!password) {
@@ -166,7 +132,7 @@
 
             //request
             $.ajax({
-                url: "http://barbeariaosasco.u2x.com.br/api/usuario/Login/" + login + "/" + password,
+                url: URL + "/api/usuario/Login/" + login + "/" + password,
                 success: function (result) {
                     if (!result) {
                         Materialize.toast('O [login] ou [senha] são inválidos.', 4000)

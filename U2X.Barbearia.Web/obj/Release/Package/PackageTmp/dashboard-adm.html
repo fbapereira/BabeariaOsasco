@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="PT">
 
 <head>
@@ -27,18 +26,36 @@
         <div class="nav-wrapper">
 
             <a href="dashboard.html" class="brand-logo">Barbearia</a>
-            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse">
+                <i class="material-icons">menu</i>
+            </a>
             <ul class="right hide-on-med-and-down">
-                <li><a id="mnServico" href="servico.html">Serviços</a></li>
-                <li><a id="mnUsuario" href="AlterarSenha.html">Usuários</a></li>
-                <li><a id="mnHistorico" href="historico.html">Histórico</a></li>
-                <li><a id="mnSair" href="sair.html">Sair</a></li>
+                <li>
+                    <a id="mnServico" href="servico.html">Serviços</a>
+                </li>
+                <li>
+                    <a id="mnUsuario" href="AlterarSenha.html">Alterar Senha</a>
+                </li>
+                <li>
+                    <a id="mnHistorico" href="historico.html">Histórico</a>
+                </li>
+                <li>
+                    <a id="mnSair" href="sair.html">Sair</a>
+                </li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
-                <li><a id="mmServico" href="servico.html">Serviços</a></li>
-                <li><a id="mmUsuario" href="AlterarSenha.html">Usuários</a></li>
-                <li><a id="mmHistorico" href="historico.html">Histórico</a></li>
-                <li><a id="mmSair" href="sair.html">Sair</a></li>
+                <li>
+                    <a id="mmServico" href="servico.html">Serviços</a>
+                </li>
+                <li>
+                    <a id="mmUsuario" href="AlterarSenha.html">Alterar Senha</a>
+                </li>
+                <li>
+                    <a id="mmHistorico" href="historico.html">Histórico</a>
+                </li>
+                <li>
+                    <a id="mmSair" href="sair.html">Sair</a>
+                </li>
             </ul>
 
 
@@ -127,9 +144,11 @@
                 <div class="spinner-layer spinner-green-only">
                     <div class="circle-clipper left">
                         <div class="circle"></div>
-                    </div><div class="gap-patch">
+                    </div>
+                    <div class="gap-patch">
                         <div class="circle"></div>
-                    </div><div class="circle-clipper right">
+                    </div>
+                    <div class="circle-clipper right">
                         <div class="circle"></div>
                     </div>
                 </div>
@@ -139,9 +158,10 @@
     </div>
     <!--  Scripts-->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="js/moment.js"></script>
     <script src="js/materialize.js"></script>
     <script src="js/init.js"></script>
+    <script src="js/main.js"></script>
     <style>
         .modalLoader {
             background: transparent;
@@ -152,16 +172,12 @@
     </style>
     <script>
         $(document).ready(function () {
-
-            $('.modal').modal({
-                dismissible: false, // Modal can be dismissed by clicking outside of the modal
-                opacity: .8, // Opacity of modal background
-            });
-
+            ConfigModal();
             $('#modalLoader').modal('open');
             CarregaUsuarios();
             CarregaTabela();
             SalvaDadosUsuario();
+            ShowMessage();
         });
 
         function ValidaCredenciais() {
@@ -177,6 +193,9 @@
                 $("#mmServico").hide();
 
             }
+            $("#mnServico").hide();
+            $("#mmServico").hide();
+
             $('#modalLoader').modal('close');
 
             $('#slProfissional').material_select();
@@ -193,7 +212,7 @@
             sessionStorage.setItem('id', id);
             sessionStorage.setItem('isAdmin', isAdmin);
 
-            window.location.replace("/add.html");
+            window.location.replace("./add.html");
         }
 
         function SalvaDadosUsuario() {
@@ -204,7 +223,7 @@
             $("#isAdmin").val(sessionStorage.getItem('isAdmin'));
 
             if (!$("#login").val()) {
-                window.location.replace("/index.html");
+                window.location.replace("./index.html");
             }
 
         }
@@ -217,15 +236,26 @@
             if (!idProfissional) { idProfissional = 0 }
 
             $.ajax({
-                url: "/api/ReportRegistro/GetByDate/" + idProfissional + "/" + moment().format('DDMMYYYY'),
+                url: URL + "/api/ReportRegistro/GetByDate/" + idProfissional + "/" + moment().format('DDMMYYYY'),
                 success: function (ReportRegistros) {
 
                     var table = $("#tblServico");
                     $("#tblServico tr>td").remove();
 
+                    if (ReportRegistros.length == 0) {
+                        $("#tblServico").hide();
+                    } else {
+                        $("#tblServico").show();
+                    }
+
                     //todas
                     CalculaValores(ReportRegistros);
-                    ReportRegistros.forEach(reportRegistro => {
+                    if (!ReportRegistros || ReportRegistros.length == 0) {
+                        $('#modalLoader').modal('close');
+                        return;
+                    }
+
+                    ReportRegistros.forEach(function (reportRegistro) {
                         // Create an empty <tr> element and add it to the 1st position of the table:
                         var row = table[0].tBodies[0].insertRow(0);
 
@@ -244,9 +274,9 @@
 
                         var cell5 = row.insertCell(4);
                         if (reportRegistro.isCartao) {
-                            cell5.innerHTML = `<i class="material-icons">credit_card</i>`;
+                            cell5.innerHTML = '<i class="material-icons">credit_card</i>';
                         } else {
-                            cell5.innerHTML = `<i class="material-icons">attach_money</i>`;
+                            cell5.innerHTML = '<i class="material-icons">attach_money</i>';
                         }
                     });
 
@@ -267,7 +297,7 @@
         function CarregaUsuarios() {
 
             $.ajax({
-                url: "/api/usuario",
+                url: URL + "/api/usuario",
                 success: function (servicos) {
                     var slProfissional = $("#slProfissional");
 
@@ -279,16 +309,13 @@
                     slProfissional[0].add(option);
 
                     //todas
-                    servicos.forEach(servico => {
+                    servicos.forEach(function (servico) {
                         var option = document.createElement("option");
                         option.text = servico.login;
                         option.value = servico.id;
                         slProfissional[0].add(option);
                     });
-
                     ValidaCredenciais();
-
-
                 },
                 error: function () {
                     Materialize.toast('O [login] ou [senha] são inválidos.', 4000)
@@ -313,7 +340,7 @@
             var nTotal = 0;
             var nReceber = 0;
 
-            servicos.forEach(servico => {
+            servicos.forEach(function (servico) {
                 nTotal = nTotal + servico.valor;
 
                 if (servico.isCartao) {
@@ -341,4 +368,5 @@
 
 
 </body>
+
 </html>

@@ -19,20 +19,48 @@
     <input type="hidden" id="isAdmin">
     <nav class="green" role="navigation">
         <div class="nav-wrapper">
-            <a href="dashboard.html" class="brand-logo">Barbearia</a>
-            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+
+            <a href="dashboard-adm.html" class="brand-logo">Barbearia</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse">
+                <i class="material-icons">menu</i>
+            </a>
             <ul class="right hide-on-med-and-down">
-                <li><a id="mnServico" href="servico.html">Serviços</a></li>
-                <li><a id="mnUsuario" href="AlterarSenha.html">Usuários</a></li>
-                <li><a id="mnHistorico" href="historico.html">Histórico</a></li>
-                <li><a id="mnSair" href="sair.html">Sair</a></li>
+                <li>
+                    <a id="mnInicio" href="dashboard-adm.html">Inicio</a>
+                </li>
+                <li>
+                    <a id="mnServico" href="servico.html">Serviços</a>
+                </li>
+                <li>
+                    <a id="mnUsuario" href="AlterarSenha.html">Alterar Senha</a>
+                </li>
+                <li>
+                    <a id="mnHistorico" href="historico.html">Histórico</a>
+                </li>
+                <li>
+                    <a id="mnSair" href="sair.html">Sair</a>
+                </li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
-                <li><a id="mmServico" href="servico.html">Serviços</a></li>
-                <li><a id="mmUsuario" href="AlterarSenha.html">Usuários</a></li>
-                <li><a id="mmHistorico" href="historico.html">Histórico</a></li>
-                <li><a id="mmSair" href="sair.html">Sair</a></li>
+                <li>
+                    <a id="mnInicio" href="dashboard-adm.html">Inicio</a>
+                </li>
+                <li>
+                    <a id="mmServico" href="servico.html">Serviços</a>
+                </li>
+                <li>
+                    <a id="mmUsuario" href="AlterarSenha.html">Alterar Senha</a>
+                </li>
+                <li>
+                    <a id="mmHistorico" href="historico.html">Histórico</a>
+                </li>
+                <li>
+                    <a id="mmSair" href="sair.html">Sair</a>
+                </li>
             </ul>
+
+
+
         </div>
     </nav>
     <div class="section no-pad-bot" id="index-banner">
@@ -59,10 +87,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col s4 offset-s2">
-                    <a class="btn-large waves-effect waves-light grey" onclick="IrParaDashBoard();" style="width:100%">Voltar</a>
-                </div><div class="col s4 ">
+                <div class="col s12 m4" style="margin-bottom: 10px">
                     <a class="btn-large waves-effect waves-light green" onclick="btn_salvar_click();" style="width:100%">Salvar</a>
+                </div>
+                <div class="col s12 offset-m2 m4" style="margin-bottom: 10px">
+                    <a class="btn-large waves-effect waves-light grey" onclick="IrParaDashBoard();" style="width:100%">Voltar</a>
                 </div>
             </div>
             <br>
@@ -76,9 +105,11 @@
                 <div class="spinner-layer spinner-green-only">
                     <div class="circle-clipper left">
                         <div class="circle"></div>
-                    </div><div class="gap-patch">
+                    </div>
+                    <div class="gap-patch">
                         <div class="circle"></div>
-                    </div><div class="circle-clipper right">
+                    </div>
+                    <div class="circle-clipper right">
                         <div class="circle"></div>
                     </div>
                 </div>
@@ -92,6 +123,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="js/materialize.js"></script>
     <script src="js/init.js"></script>
+    <script src="js/main.js"></script>
     <style>
         .modalLoader {
             background: transparent;
@@ -104,15 +136,11 @@
 <script>
 
     $(document).ready(function () {
-        // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal({
-            dismissible: false, // Modal can be dismissed by clicking outside of the modal
-            opacity: .8, // Opacity of modal background
-        });
+        ConfigModal();
         CarregaUsuarios();
         CarregaServicos();
         SalvaDadosUsuario();
-
+        ShowMessage();
 
     });
 
@@ -128,6 +156,8 @@
             $("#mmServico").hide();
 
         }
+        $("#mnServico").hide();
+        $("#mmServico").hide();
 
         $("#slProfissional").val(id);
         $('#slProfissional').material_select();
@@ -168,7 +198,7 @@
     function CarregaServicos() {
 
         $.ajax({
-            url: "http://barbeariaosasco.u2x.com.br/api/Servico",
+            url: URL +"/api/Servico",
             success: function (servicos) {
                 var slServico = $("#slServico");
 
@@ -180,7 +210,7 @@
                 slServico[0].add(option);
 
                 //todas
-                servicos.forEach(servico => {
+                servicos.forEach(function (servico) {
                     var option = document.createElement("option");
                     option.text = servico.descricao;
                     option.value = servico.id;
@@ -202,7 +232,7 @@
         $('#modalLoader').modal('open');
 
         $.ajax({
-            url: "http://barbeariaosasco.u2x.com.br/api/usuario",
+            url: URL + "/api/usuario",
             success: function (servicos) {
                 var slProfissional = $("#slProfissional");
 
@@ -214,7 +244,7 @@
                 slProfissional[0].add(option);
 
                 //todas
-                servicos.forEach(servico => {
+                servicos.forEach(function (servico) {
                     var option = document.createElement("option");
                     option.text = servico.login;
                     option.value = servico.id;
@@ -261,12 +291,13 @@
         }
 
         $.ajax({
-            url: "http://barbeariaosasco.u2x.com.br/api/Registro",
+            url: URL + "/api/Registro",
             type: "POST",
             data: jsonObj,
 
             success: function (servicos) {
                 IrParaDashBoard();
+                AddMessage("Novo [servico] adicionado.");
                 $('#modalLoader').modal('close');
             },
             error: function () {

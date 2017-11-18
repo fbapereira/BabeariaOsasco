@@ -44,11 +44,12 @@ namespace U2X.Barbearia.Web.controllers
             return null;
         }
 
-        [HttpPut]
-        public void Put(int id, [FromBody]tbl_usuario value)
+        [HttpPost]
+        [Route("Senha")]
+        public void Senha([FromBody]tbl_usuario value)
         {
             U2xDB db = new U2xDB();
-            tbl_usuario temp = (tbl_usuario)db.tbl_usuario.Where(usuario => usuario.id == id).FirstOrDefault();
+            tbl_usuario temp = (tbl_usuario)db.tbl_usuario.Where(usuario => usuario.id == value.id).FirstOrDefault();
 
             if (temp != null)
             {
